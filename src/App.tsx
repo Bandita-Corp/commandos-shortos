@@ -3,21 +3,20 @@ import {
   Zap, 
   BarChart3, 
   Settings as SettingsIcon, 
-  FileEdit, 
   Command, 
-  ShieldCheck, 
-  Database,
+  Keyboard,
   Sparkles
 } from 'lucide-react';
 import { MacroHub } from './components/MacroHub';
 import { QuickCaptureModal } from './components/QuickCaptureModal';
 import { AnalyticsDashboard } from './components/AnalyticsDashboard';
 import { SettingsModal } from './components/SettingsModal';
+import { ShortcutManager } from './components/ShortcutManager';
 
-type ActiveTab = 'macros' | 'analytics' | 'settings';
+type ActiveTab = 'macros' | 'shortcuts' | 'analytics' | 'settings';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('macros');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('shortcuts');
   const [isQuickCaptureOpen, setIsQuickCaptureOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -48,17 +47,28 @@ export const App: React.FC = () => {
             <h1 className="text-base font-extrabold tracking-wide text-white flex items-center gap-2">
               CommandOS Hub
               <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/30 font-semibold">
-                v1.0 Local
+                v1.1 Pro
               </span>
             </h1>
             <p className="text-[11px] text-slate-400">
-              Obsidian Note Capture & Macro Orchestration
+              Obsidian Note Capture & Dynamic Hotkey Engine
             </p>
           </div>
         </div>
 
         {/* Center Tabs */}
         <div className="flex bg-slate-900/80 border border-slate-800 p-1 rounded-2xl shadow-inner">
+          <button
+            onClick={() => setActiveTab('shortcuts')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+              activeTab === 'shortcuts'
+                ? 'bg-accent-cyan text-slate-950 shadow-md font-bold'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+            }`}
+          >
+            <Keyboard className="w-3.5 h-3.5" />
+            Shortcuts & Actions
+          </button>
           <button
             onClick={() => setActiveTab('macros')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
@@ -111,6 +121,9 @@ export const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto p-6 max-w-7xl w-full mx-auto">
+        {activeTab === 'shortcuts' && (
+          <ShortcutManager onShortcutTriggered={triggerStatsRefresh} />
+        )}
         {activeTab === 'macros' && (
           <MacroHub onMacroExecuted={triggerStatsRefresh} />
         )}

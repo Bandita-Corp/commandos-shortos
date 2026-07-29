@@ -20,3 +20,13 @@ model MacroUsageLog {
   status     String
   executedAt DateTime @default(now())
 }
+
+model ShortcutBinding {
+  id         String   @id @default(uuid())
+  name       String
+  shortcut   String
+  actionType String
+  target     String
+  enabled    Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}

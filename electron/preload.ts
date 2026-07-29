@@ -1,23 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-export interface ElectronAPI {
-  // Obsidian
-  captureObsidianNote: (data: { filePath?: string; content: string; tags: string[] }) => Promise<{ success: boolean; data?: any; error?: string }>;
-  getObsidianEntries: () => Promise<{ success: boolean; data?: any; error?: string }>;
-  selectVaultFile: () => Promise<{ success: boolean; data?: any; error?: string }>;
-  
-  // Macros
-  runMacro: (macroKey: string, customConfig?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
-  getMacroLogs: () => Promise<{ success: boolean; data?: any; error?: string }>;
-  
-  // App Settings
-  getSettings: () => Promise<{ success: boolean; data?: any; error?: string }>;
-  saveSettings: (settings: any) => Promise<{ success: boolean; data?: any; error?: string }>;
-  
-  // Events
-  onTriggerQuickCapture: (callback: () => void) => () => void;
-}
-
 contextBridge.exposeInMainWorld('electronAPI', {
   captureObsidianNote: (data: { filePath?: string; content: string; tags: string[] }) =>
     ipcRenderer.invoke('obsidian:capture', data),
@@ -30,6 +12,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('macro:run', { macroKey, customConfig }),
   getMacroLogs: () =>
     ipcRenderer.invoke('macro:getLogs'),
+
+  // Dynamic Shortcuts Manager
+  getShortcuts: () =>
+    ipcRenderer.invoke('shortcuts:get'),
+  createShortcut: (data: any) =>
+    ipcRenderer.invoke('shortcuts:create', data),
+  updateShortcut: (id: string, data: any) =>
+    ipcRenderer.invoke('shortcuts:update', { id, data }),
+  deleteShortcut: (id: string) =>
+    ipcRenderer.invoke('shortcuts:delete', id),
+  toggleShortcut: (id: string, enabled: boolean) =>
+    ipcRenderer.invoke('shortcuts:toggle', { id, enabled }),
+  testShortcut: (id: string) =>
+    ipcRenderer.invoke('shortcuts:test', id),
 
   getSettings: () =>
     ipcRenderer.invoke('settings:get'),
