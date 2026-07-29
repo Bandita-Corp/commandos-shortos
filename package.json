@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && tsc -p tsconfig.electron.json",
+    "start": "npm run build && electron .",
+    "electron:dev": "tsc -p tsconfig.electron.json && electron .",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "preview": "vite preview"
