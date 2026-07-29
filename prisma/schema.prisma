@@ -1,0 +1,22 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model ObsidianEntry {
+  id        String   @id @default(uuid())
+  wordCount Int
+  tags      String
+  createdAt DateTime @default(now())
+}
+
+model MacroUsageLog {
+  id         Int      @id @default(autoincrement())
+  macroName  String
+  status     String
+  executedAt DateTime @default(now())
+}

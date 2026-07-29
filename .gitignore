@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+dist-electron/
+
+# SQLite & local app data
+*.db
+*.db-journal
+
+# Environment & IDE
+.env
+.env.local
+.vscode/
+.idea/
+*.log
